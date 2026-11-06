@@ -1,7 +1,7 @@
 """
 Compare fast_dem against the original scipy implementation on random perturbed rows.
 
-    python validate.py --ref-dir ../ref --n 16
+    python validate.py --ref-dir ../scipy_ref --n 16
 
 --ref-dir must contain the original (scipy) main_disorder_v2.py, impact_equation_of_motion_hetero.py
 and impact_force.py. Each reference row takes ~6 s, so rows run in parallel processes.
