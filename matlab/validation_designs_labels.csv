@@ -1,0 +1,17 @@
+id,label
+0,matlab example (main_disorder.m)
+1,paper: homogeneous bistable (opt)
+2,paper: heterogeneous (opt)
+3,paper: het. excl. bistab. (opt)
+4,paper: homogeneous bistable (pert)
+5,paper: heterogeneous (pert)
+6,paper: het. excl. bistab. (pert)
+7,random homo
+8,random homo
+9,random homo
+10,random hetero
+11,random hetero
+12,random hetero
+13,random hetero_excl
+14,random hetero_excl
+15,random hetero_excl
