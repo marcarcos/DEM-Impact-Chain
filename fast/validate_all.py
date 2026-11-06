@@ -5,8 +5,7 @@ Step 1  make the shared design list (once):
     python validate_all.py make --out validation_designs.csv
 Step 2  run MATLAB (or Octave) on it with run_validation.m  -> matlab_results.csv
 Step 3  run both Python versions and compare all three:
-    python validate_all.py compare --designs validation_designs.csv \
-        --ref-dir ../scipy_ref --matlab matlab_results.csv
+    python validate_all.py compare --designs validation_designs.csv --ref-dir ../scipy_ref --matlab ../matlab/matlab_results.csv
 
 The design list holds the MATLAB example, the six designs tabulated in the paper's SI
 (Table S1, with the paper's KE values), and random admissible designs from each category.
