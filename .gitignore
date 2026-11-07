@@ -1,0 +1,15 @@
+# Python / Numba caches (Numba writes *.nbi / *.nbc next to the source)
+__pycache__/
+*.pyc
+*.nbi
+*.nbc
+.ipynb_checkpoints/
+
+# macOS
+.DS_Store
+
+# Interrupted dataset runs (generate_dataset.py checkpoint files)
+*.partial.npz
+
+# MATLAB / Octave autosave
+*.asv
