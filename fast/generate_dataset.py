@@ -31,7 +31,8 @@ Output npz keys
 REPLICATION NOTE: the paper builds its baseline sets by OPTIMISING (fmincon from random
 starts) and keeping solutions with KE in a window. This script draws designs uniformly
 at random from the admissible design space; good designs found this way are a
-different population from optimised minima. optimize.py produces the optimised set.
+different population from optimised minima. The inverse-design step is not
+implemented yet (see REPLICATION.md).
 """
 import argparse
 import os
