@@ -107,3 +107,7 @@ the same optimum. The notebook does not execute native MATLAB validation; see
 * Chain categories: `homo` (one spring law), `hetero` (four), `hetero_excl` (four, none
   bistable: c2² ≤ 4c3). All designs must satisfy positive strain energy c3 > (2/9)c2².
 * Spring types (SI-3): monotonic c2² ≤ 3c3, snap-through 3c3 < c2² ≤ 4c3, bistable c2² > 4c3.
+
+## AI Usage Statement
+
+We used AI tools to assist with code documentation and optimization. AI was used to improve and optimize code based on our own implementations.
