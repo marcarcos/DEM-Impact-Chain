@@ -1,9 +1,11 @@
 """
 Compare fast_dem against the original scipy implementation on random perturbed rows.
 
-    python validate.py --ref-dir ../scipy_ref --n 16
+    python validate.py --n 16
 
---ref-dir must contain the original (scipy) main_disorder_v2.py, impact_equation_of_motion_hetero.py
+Uses the old "local" sampler (MATLAB example design x uniform factors), i.e. designs
+around one point; validate_all.py covers the paper's design space and MATLAB too.
+--ref-dir (default ../scipy_ref) must contain the original (scipy) main_disorder_v2.py, impact_equation_of_motion_hetero.py
 and impact_force.py. Each reference row takes ~6 s, so rows run in parallel processes.
 """
 import argparse
@@ -17,7 +19,8 @@ import numpy as np
 import fast_dem as F
 from generate_dataset import sample_coeffs
 
-_REF_FN = None
+_REF_FN = None   # per-process cache of the loaded reference function
+REF_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "scipy_ref")
 
 
 def _load_reference(ref_dir):
@@ -40,6 +43,7 @@ def _load_reference(ref_dir):
 
 
 def _ref(args):
+    """Worker: (ref_dir, c2, c3) -> scipy reference KE ratio (loads the module once per process)."""
     global _REF_FN
     ref_dir, c2, c3 = args
     if _REF_FN is None:
@@ -49,7 +53,7 @@ def _ref(args):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--ref-dir", required=True)
+    ap.add_argument("--ref-dir", default=REF_DIR)
     ap.add_argument("--n", type=int, default=16)
     ap.add_argument("--spread", type=float, default=0.3)
     ap.add_argument("--seed", type=int, default=123)
