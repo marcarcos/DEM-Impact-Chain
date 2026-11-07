@@ -1,9 +1,15 @@
-\documentclass[11pt]{article}
+% \documentclass[11pt]{article}
+\documentclass[12pt,letterpaper]{article}
+\usepackage{style/dsc180reportstyle}
+\setcitestyle{numbers}
 % Checkpoint report. Figures and numbers come from make_figures.py (figures/numbers.json).
 % Build:  cd report && latexmk -pdf checkpoint.tex
 
 \usepackage[margin=1in]{geometry}
-\usepackage{amsmath,amssymb}
+\usepackage{
+    amsmath,
+    % amssymb
+}
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{siunitx}
@@ -11,7 +17,7 @@
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{float}
-\usepackage[hidelinks]{hyperref}
+% \usepackage[hidelinks]{hyperref}
 \usepackage[capitalise]{cleveref}
 
 \captionsetup{font=small,labelfont=bf}
@@ -21,7 +27,19 @@
 \title{Robust Impact Mitigation with Heterogeneous Nonlinear Metamaterials:\\
        Replicating and Extending a Discrete-Element Study\\[4pt]
        \large Checkpoint Report}
-\author{\todo{author names}}
+% \author{\todo{author names}}
+
+\author{Ahmad Ageel \\
+  {\tt aageel@ucsd.edu} \\\And
+  Marcelo \\
+  {\tt email@ucsd.edu} \\\And
+  Leo \\
+  {\tt email@ucsd.edu} \\\And
+  % Fourth Author \\
+  % {\tt email@ucsd.edu} \\\And
+  Igor \\
+  {\tt email@ucsd.edu} \\}
+
 \date{\today}
 
 \begin{document}
