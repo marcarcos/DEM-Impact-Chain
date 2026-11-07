@@ -1,3 +1,9 @@
+"""Smoke test of the scipy reference on the MATLAB example design (matlab/main_disorder.m).
+
+    cd scipy_ref && python test_main.py
+
+Expected output: Maximum KE ratio: ~0.148100 (MATLAB: 0.1481001164). Takes ~10 s.
+"""
 from main_disorder_v2 import main_disorder_v2
 
 

@@ -1,3 +1,18 @@
+"""
+One-at-a-time (OAT) sensitivity sweep around the MATLAB example design.
+
+Each of the 8 coefficients (c2 and c3 of families 1-4 = A-D) is scaled by 0.5x..1.5x
+(21 steps) while the other seven stay at the baseline
+c2 = [-70, -100, -5, -35], c3 = [1200, 2000, 1500, 3000]. Results go to
+data/sensitivity_<timestamp>.csv and two matplotlib figures are shown.
+
+Exploratory, not a figure of the paper. Note that some swept designs violate the
+positive-energy constraint c3 > (2/9) c2^2 (e.g. c3_1 at -50 %), which the paper excludes;
+those rows show very large KE ratios. Uses the slow scipy reference (8 x 21 runs,
+~15-20 min); swap the import for fast/fast_dem.main_disorder_v2 for a ~1 s run.
+
+    cd scipy_ref && python sim_data.py
+"""
 import csv
 from datetime import datetime
 from pathlib import Path

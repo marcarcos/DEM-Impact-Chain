@@ -2,9 +2,14 @@
 Quick validation of the model itself: evaluate the equations of motion (the ODE right-hand
 side) at many random states and designs in all three codes and compare.
 
-    python rhs_check.py make --n 5000                  # writes rhs_inputs.csv
-    octave rhs_check.m   (or run rhs_check in MATLAB)  # writes rhs_matlab.csv  (seconds)
-    python rhs_check.py compare --ref-dir ../scipy_ref # compares MATLAB, scipy port, fast_dem
+    python rhs_check.py make --n 5000      # writes ../matlab/rhs_inputs.csv
+    cd ../matlab && octave rhs_check.m     # (or run rhs_check in MATLAB) -> rhs_matlab.csv
+    python rhs_check.py compare            # compares MATLAB, scipy port, fast_dem
+
+This isolates the physics from the integrator: if the RHS agrees to machine precision
+(expected ~1e-12 relative, fast_dem reorders the arithmetic), any difference in the KE
+ratio can only come from time integration / peak detection (see validate_all.py).
+Default paths are resolved relative to this file, so it runs from any directory.
 
 States are random but chosen to hit every branch: springs in tension and compression,
 deep compression past the bistable well, impactor overlapping or separated from mass 1.
@@ -18,10 +23,14 @@ import numpy as np
 import fast_dem as F
 from generate_dataset import sample_design_space
 
-NM = F.N + 1  # 21 masses
+NM = F.N + 1  # 21 masses (impactor + 20 chain masses)
+HERE = os.path.dirname(os.path.abspath(__file__))
+MATLAB_DIR = os.path.join(HERE, "..", "matlab")
+REF_DIR = os.path.join(HERE, "..", "scipy_ref")
 
 
 def make(n, seed, out):
+    """Write n random (design, state) rows: c2_A..D, c3_A..D, then 42 interleaved states."""
     rng = np.random.default_rng(seed)
     third = n // 3
     parts = [sample_design_space(rng, k, c) for k, c in
@@ -45,6 +54,7 @@ def make(n, seed, out):
 
 
 def compare(inp, matlab_out, ref_dir):
+    """Evaluate the RHS on every row with scipy_ref and fast_dem (+ MATLAB file) and compare."""
     A = np.loadtxt(inp, delimiter=",")
     c2, c3, x = A[:, :4], A[:, 4:8], A[:, 8:]
     n = len(A)
@@ -93,11 +103,11 @@ def main():
     m = sub.add_parser("make")
     m.add_argument("--n", type=int, default=5000)
     m.add_argument("--seed", type=int, default=0)
-    m.add_argument("--out", default="rhs_inputs.csv")
+    m.add_argument("--out", default=os.path.join(MATLAB_DIR, "rhs_inputs.csv"))
     c = sub.add_parser("compare")
-    c.add_argument("--inputs", default="rhs_inputs.csv")
-    c.add_argument("--matlab", default="rhs_matlab.csv")
-    c.add_argument("--ref-dir", required=True)
+    c.add_argument("--inputs", default=os.path.join(MATLAB_DIR, "rhs_inputs.csv"))
+    c.add_argument("--matlab", default=os.path.join(MATLAB_DIR, "rhs_matlab.csv"))
+    c.add_argument("--ref-dir", default=REF_DIR, help="folder with the scipy reference port")
     a = ap.parse_args()
     if a.cmd == "make":
         make(a.n, a.seed, a.out)

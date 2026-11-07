@@ -2,14 +2,22 @@
 Three-way validation: original MATLAB code, scipy Python port, and fast_dem.
 
 Step 1  make the shared design list (once):
-    python validate_all.py make --out validation_designs.csv
+    python validate_all.py make --out validation_designs.csv   (copy it to ../matlab/)
 Step 2  run MATLAB (or Octave) on it with run_validation.m  -> matlab_results.csv
 Step 3  run both Python versions and compare all three:
-    python validate_all.py compare --designs validation_designs.csv --ref-dir ../scipy_ref --matlab ../matlab/matlab_results.csv
+    python validate_all.py compare          (defaults: ../scipy_ref, ../matlab/matlab_results.csv)
 
 The design list holds the MATLAB example, the six designs tabulated in the paper's SI
 (Table S1, with the paper's KE values), and random admissible designs from each category.
+
+Reading the "paper" column: for designs with bistable springs (homogeneous opt, and
+heterogeneous pert) the KE ratio is so sensitive that the 2-decimal coefficients
+printed in Table S1 are not enough to reproduce Table S2 -- moving c2/c3 by less than
++-0.005 spans e.g. 0.0117..0.062 for the homogeneous optimum. All three codes agree
+with each other; the mismatch is in the rounding of the published table. See
+REPLICATION.md.
 """
+import os
 import argparse
 import csv
 from concurrent.futures import ProcessPoolExecutor
@@ -19,6 +27,8 @@ import numpy as np
 import fast_dem as F
 from generate_dataset import sample_design_space
 from validate import _ref
+
+HERE = os.path.dirname(os.path.abspath(__file__))
 
 PAPER = [  # (label, c2, c3, paper KE) from SI Table S1 / S2
     ("paper: homogeneous bistable (opt)", [-116.12] * 4, [3052.97] * 4, 0.0117),
@@ -31,6 +41,7 @@ PAPER = [  # (label, c2, c3, paper KE) from SI Table S1 / S2
 
 
 def make(out, n_random, seed):
+    """Write the shared design list (+ a *_labels.csv with a human-readable label per id)."""
     rows = [("matlab example (main_disorder.m)", [-70, -100, -5, -35], [1200, 2000, 1500, 3000], np.nan)]
     rows += PAPER
     rng = np.random.default_rng(seed)
@@ -57,6 +68,7 @@ def _read(path):
 
 
 def compare(designs, ref_dir, matlab, workers):
+    """Run fast_dem and the scipy reference on every design and tabulate against MATLAB/paper."""
     D = _read(designs)
     try:
         labels = {int(r["id"]): r["label"] for r in _read(designs.replace(".csv", "_labels.csv"))}
@@ -72,6 +84,9 @@ def compare(designs, ref_dir, matlab, workers):
         scipy = np.array(list(ex.map(_ref, [(ref_dir, c2[i], c3[i]) for i in range(len(ids))])))
     mat = np.full(len(ids), np.nan)
     engine = ""
+    if matlab and not os.path.exists(matlab):
+        print(f"(no MATLAB results at {matlab}; comparing the Python codes only)")
+        matlab = None
     if matlab:
         M = {int(r["id"]): r for r in _read(matlab)}
         mat = np.array([float(M[i]["ratio"]) if i in M else np.nan for i in ids])
@@ -102,9 +117,9 @@ def main():
     m.add_argument("--n-random", type=int, default=3, help="random designs per category")
     m.add_argument("--seed", type=int, default=2026)
     c = sub.add_parser("compare")
-    c.add_argument("--designs", default="validation_designs.csv")
-    c.add_argument("--ref-dir", required=True)
-    c.add_argument("--matlab", default=None)
+    c.add_argument("--designs", default=os.path.join(HERE, "validation_designs.csv"))
+    c.add_argument("--ref-dir", default=os.path.join(HERE, "..", "scipy_ref"))
+    c.add_argument("--matlab", default=os.path.join(HERE, "..", "matlab", "matlab_results.csv"))
     c.add_argument("--workers", type=int, default=None)
     a = ap.parse_args()
     if a.cmd == "make":
