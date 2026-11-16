@@ -43,7 +43,10 @@ all three choices agree to < 0.3 %, so the choice doesn't matter for the results
 | Fig. 2 (KE over impactor M–V space) | 🟡 simulator ready (`m_imp`, `v_imp` arguments, verified at 1.01 M) | sweep script + plotting |
 | Fig. 1c (KE vs noise level ε, 500 samples) | 🟡 perturbation model ready (`generate_dataset.perturb`, Eq. 4) | loop over ε for the three paper designs + plot |
 | Fig. 1d / SI-4 (category robustness) | 🟡 pipeline runs (`good.py`) on random designs | optimised baseline sets (see below) |
-| Fig. 3, 4, S3, S4 (spatiotemporal KE/PE/stiffness, FFT, pulse FWHM) | 🔴 not started | full trajectory output (fast_dem only returns the peak KE); `scipy_ref` can provide trajectories |
+| Fig. 3a–c (spatiotemporal KE/IE, PE, negative stiffness) | ✅ done (`scipy_ref/plot_fig3.py`) | – peak times at the last cell 0.94 / 3.10 / 2.34 / 3.32 (paper ≈ 0.95 / 3.1 / 2.3 / 3.3) |
+| Fig. 3d (2D FFT, kx vs fn) | ✅ done, one open question | nonlinear panels match. The paper's linear panel follows the velocity dispersion fn = sin(\|kx\|/2)/π (max ≈ 0.32); the FFT of KE named in the caption reaches ≈ 0.43, because KE = v² doubles k and f. `--fft-of velocity` reproduces the paper's linear panel; ask the authors which field was transformed |
+| Fig. 4 (impactor mass 1.01 M, maps) | ✅ done (`plot_fig3.py --mass 1.01`) | – KE ratio 0.110 / 0.0265 / 0.0077, heterogeneous peak at t = 5.95 (paper 11 % / 2.6 % / 0.8 %, t ≃ 5.9) |
+| Fig. S3, S4 (pulse FWHM, KE profiles at t = 0.5) | 🔴 not started | trajectories are available from `scipy_ref/plot_matrices.simulate` |
 | Inverse design (fmincon, Methods 5.2) | 🔴 not started (deliberately postponed) | optimiser over c2/c3 with the SI-2/SI-3 constraints |
 
 ### Preliminary Fig. 1d from random designs (not yet the paper protocol)
