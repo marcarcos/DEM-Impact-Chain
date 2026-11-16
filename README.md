@@ -87,8 +87,8 @@ the same optimum. The notebook does not execute native MATLAB validation; see
 | Path | What it is |
 |---|---|
 | `Spring_GP_Colab.ipynb` | Self-contained Colab/Jupyter DEM and GP optimization workflow; run modes, sensitivity analysis, candidate verification, and exports. |
-| `matlab/` | Original MATLAB model (reference; not modified). `main_disorder.m` example, `main_disorder_fn.m` function form, `impact_equation_of_motion_hetero.m` EOM, `run_validation.m` / `rhs_check.m` produce the stored `matlab_results.csv` / `rhs_matlab.csv`. |
-| `scipy_ref/` | Line-by-line scipy port of the MATLAB code (slow, ~6 s/design). Used to arbitrate between MATLAB and the fast code. `sim_data.py` is an exploratory one-at-a-time sensitivity sweep. |
+| `matlab/` | Original MATLAB model (reference; not modified). `main_disorder.m` example, `main_disorder_fn.m` function form, `impact_equation_of_motion_hetero.m` EOM, `run_validation.m` / `rhs_check.m` produce the stored `matlab_results.csv` / `rhs_matlab.csv`. `plot_matrices.m` plots the space-time velocity matrices after `main_disorder.m`. |
+| `scipy_ref/` | Line-by-line scipy port of the MATLAB code (slow, ~6 s/design). Used to arbitrate between MATLAB and the fast code. `sim_data.py` is an exploratory one-at-a-time sensitivity sweep. `plot_matrices.py` plots the space-time velocity / displacement / KE matrices of `main_disorder.m`; `plot_fig3.py` reproduces paper Fig. 3 (a–d) and, with `--mass 1.01`, Fig. 4. |
 | `fast/fast_dem.py` | **Production simulator.** Numba-compiled Dormand–Prince 5(4) (same as scipy RK45 / MATLAB ode45), batched over CPU threads, continuous peak-KE detection. ~500–650 designs/s on 4 cores. |
 | `fast/check_simulation.py` | One-command pass/fail check vs MATLAB and the paper. |
 | `fast/rhs_check.py` | Equations of motion: fast vs scipy vs MATLAB on 5000 random states. |
